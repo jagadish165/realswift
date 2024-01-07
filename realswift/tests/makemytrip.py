@@ -1,0 +1,16 @@
+from realswift.actions import *
+from realswift.browser_utils import init_browser
+automation = init_browser("https://www.makemytrip.com")
+click("From")
+click("Delhi", relative_word_in_x_direction="1 Traveller")
+type("Visakhapatnam")
+click("VTZ")
+type("Cochin","Bengaluru",relative_to_word_in_x="1 Traveller")
+click("COK")
+click("Departure")
+click("30",item=1)
+click("SEARCH")
+click("OKAY, GOT IT!")
+scroll("down",5)
+click("VIEW PRICES",item=1)
+click("LOCK PRICE")
