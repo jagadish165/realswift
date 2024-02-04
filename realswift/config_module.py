@@ -28,8 +28,8 @@ class MyPackageConfig:
                 self.timeout = config_data.get('timeout', self.timeout)
                 self.browser = config_data.get('browser', self.browser)
                 self.options = config_data.get('options', self.options)
-                self.screenshots_path = self.screenshots_folder + '/screenshot.png'
-                self.output_path = self.screenshots_folder + '/analyzed_screenshot.png'
+        self.screenshots_path = self.screenshots_folder + '/screenshot.png'
+        self.output_path = self.screenshots_folder + '/analyzed_screenshot.png'       
 # Usage example
 # Create an instance of the configuration class
 config = MyPackageConfig()
