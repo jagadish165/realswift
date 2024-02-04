@@ -13,9 +13,8 @@ def init_browser(url):
    # try:
     if os.path.isdir(screenshots_folder):
         shutil.rmtree(screenshots_folder)
-    else:
-        os.mkdir(screenshots_folder)
-        os.mkdir(screenshots_folder+ "/old_" + screenshots_folder)
+    os.mkdir(screenshots_folder)
+    os.mkdir(screenshots_folder+ "/old_" + screenshots_folder)
 # except Exception as e:
 #    print(f"{e}")
 
