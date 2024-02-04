@@ -9,6 +9,9 @@ chrome_browser_path = config.chrome_browser_path
 browser = config.browser
 screenshots_folder = config.screenshots_folder
 options = config.options.split(";")
+window_chk = any("--window-size" in element for element in options)
+if window_chk:
+    options.append("--window-position=0,0")
 def init_browser(url):
    # try:
     if os.path.isdir(screenshots_folder):
