@@ -4,8 +4,8 @@ import pygetwindow as gw
 import pyautogui
 from config_module import config
 browser = config.browser
-screenshot_path = config.screenshot_path
-
+screenshots_path = config.screenshots_path
+output_path = config.output_path
 
 def _take_screenshot():
     """
@@ -35,12 +35,12 @@ def _take_screenshot():
         screenshot = pyautogui.screenshot(region=(window_x, window_y, window_width, window_height))
 
         # Save the screenshot to a file
-        screenshot.save(screenshot_path)
-
+        screenshot.save(screenshots_path)
+        #print(f"taking screenshot from webpage.")
         # Optionally, you can display the screenshot
         # screenshot.show()
     else:
-        print("No active window found.")
+        print("no active window found.")
 
 
 def _find_image(object, item=0, midpointRX=-1, midpointRY=-1):
@@ -60,8 +60,8 @@ def _find_image(object, item=0, midpointRX=-1, midpointRY=-1):
         tuple: A tuple containing the X and Y coordinates of the midpoint if a match is found, or None if no match is found.
     """
     _take_screenshot()
-    larger_image = cv2.imread("target/screenshot.png")
-    template = cv2.imread(f'../objects/{object}.png')
+    larger_image = cv2.imread(screenshots_path)
+    template = cv2.imread(f'objects/{object}.png')
     result = cv2.matchTemplate(larger_image, template, cv2.TM_CCORR_NORMED)
     # cv2.normalize(result, result, 0, 1, cv2.NORM_MINMAX)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
@@ -75,18 +75,17 @@ def _find_image(object, item=0, midpointRX=-1, midpointRY=-1):
         bottom_right = (pt[0] + w, pt[1] + h)
         midpointX = (top_left[0] + bottom_right[0]) // 2
         midpointY = (top_left[1] + bottom_right[1]) // 2
-        print(f'{midpointX},{midpointY}')
         if not midpointRX == -1:
             if abs(midpointRX - midpointX) < 5:
                 midpoint = midpointX, midpointY
         elif not midpointRY == -1:
-            print(f'midpoint diff of {midpointRY},{midpointY}=={abs(midpointRY - midpointY)}')
+            #print(f'midpoint diff of {midpointRY},{midpointY}=={abs(midpointRY - midpointY)}')
             if abs(midpointRY - midpointY) < 5:
                 midpoint = midpointX, midpointY
         elif item == i:
             midpoint = midpointX, midpointY
         cv2.rectangle(larger_image, top_left, bottom_right, (0, 0, 255), 2)
         i += 1
-    cv2.imwrite("target/objectOutput.png", larger_image)
-    print(f"Confidence: {max_val}")
+    cv2.imwrite(output_path, larger_image)
+    print(f"element '{object}' found at the location {midpointX},{midpointY} on the webpage with confidence: {max_val}")
     return midpoint

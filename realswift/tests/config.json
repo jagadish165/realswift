@@ -1,1 +1,5 @@
-{"browser": "edge"}
+{
+  "browser": "chrome",
+  "timeout": 20,
+  "options": "--window-size=1920,680;--start-maximized;--incognito"
+}

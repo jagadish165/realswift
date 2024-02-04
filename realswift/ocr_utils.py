@@ -1,15 +1,14 @@
 import datetime
-import os
 import cv2
 import easyocr
 import math
 from config_module import config
-screenshot_path = config.screenshot_path
+screenshots_path = config.screenshots_path
 output_path = config.output_path
 
 def _perform_ocr():
     global results, image
-    image = cv2.imread(screenshot_path)
+    image = cv2.imread(screenshots_path)
     time_initial = datetime.datetime.now()
     reader = easyocr.Reader(
         ['en'],
@@ -17,10 +16,10 @@ def _perform_ocr():
     )
 
     # Perform OCR on the image
-    print('Reading text from screenshot........')
+    print('reading text from webpage...')
     results = reader.readtext(image, batch_size=64, slope_ths=0.5)
     time_delta = datetime.datetime.now() - time_initial
-    print(f"Time took to read - {time_delta}")
+    print(f"time took to read all the text from webpage- {time_delta}")
 
 def _analyse_ocr_results(txtToSearch, exactmatch, item, top_leftRX=-1, midpointRY=-1, y_axis=False):
     #time_initial = datetime.datetime.now()
@@ -70,12 +69,7 @@ def _analyse_ocr_results(txtToSearch, exactmatch, item, top_leftRX=-1, midpointR
         cv2.rectangle(image, top_left, bottom_right, (0, 255, 0), 2)
         # print(f'Bounding Box Coordinates:{text}, {top_left}, {bottom_right}')
 
-    try:
-        now = datetime.datetime.now()
-        new_file_name = f"output_{now.strftime('%Y-%m-%d-%H-%M-%S')}.png"
-        os.rename(output_path, f"target/old_ss/{new_file_name}")
-    except Exception as e:
-        print(f"exception {e}")
+
     cv2.imwrite(output_path, image)
     distances = [math.sqrt(x ** 2 + y ** 2) for x, y in listValues]
     # Create a list of (distance, coordinate) pairs
@@ -87,9 +81,9 @@ def _analyse_ocr_results(txtToSearch, exactmatch, item, top_leftRX=-1, midpointR
     # Extract the sorted coordinates
     sorted_coordinates = [pair[1] for pair in sorted_pairs]
 
-    print(f'{txtToSearch} = {sorted_coordinates}')
     #time_delta = datetime.datetime.now() - time_initial
     #print(f"Time took to analyse - {time_delta}")
+
     if y_axis:
         return top_left_found
     else:

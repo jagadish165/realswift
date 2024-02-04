@@ -9,10 +9,10 @@ class MyPackageConfig:
         self.offsetx = 0
         self.offsety = 0
         self.mousespeed = 0.2
-        self.screenshot_path = 'target/screenshot.png'
+        self.screenshots_folder = 'screenshots'
         self.timeout = 60
         self.browser = 'chrome'
-        self.output_path = 'target/output.jpg'
+        self.options = '--start-maximized'
     def load_from_file(self, file_path):
         # Load configuration from a file (e.g., JSON)
         if os.path.exists(file_path):
@@ -24,10 +24,12 @@ class MyPackageConfig:
                 self.offsety = config_data.get('offsety', self.offsety)
                 self.edge_browser_path = config_data.get('edge_browser_path', self.edge_browser_path)
                 self.mousespeed = config_data.get('mousespeed', self.mousespeed)
-                self.screenshot_path = config_data.get('screenshot_path', self.screenshot_path)
+                self.screenshots_folder = config_data.get('screenshots_folder', self.screenshots_folder)
                 self.timeout = config_data.get('timeout', self.timeout)
                 self.browser = config_data.get('browser', self.browser)
-                self.output_path = config_data.get('output_path', self.output_path)
+                self.options = config_data.get('options', self.options)
+                self.screenshots_path = self.screenshots_folder + '/screenshot.png'
+                self.output_path = self.screenshots_folder + '/analyzed_screenshot.png'
 # Usage example
 # Create an instance of the configuration class
 config = MyPackageConfig()

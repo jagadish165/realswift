@@ -20,32 +20,34 @@ Usage
 The script provides the following functions:
 
 
-| Method | Parameter | Description |
-|--------|-----------|-------------|
-| `type` | `txtToEnter` | The text to type. |
-|        | `txtToFind` | The element to find and click on. |
-|        | `exactmatch` | Whether to perform an exact match for the element (boolean). |
-|        | `object` | The element object to interact with. |
-|        | `item` | The index of the item to interact with. |
+| Method | Parameter                      | Description |
+|--------|--------------------------------|-------------|
+| `type` | `txtToEnter`                   | The text to type. |
+|        | `txtToFind`                    | The element to find and click on. |
+|        | `exactmatch`                   | Whether to perform an exact match for the element (boolean). |
+|        | `object`                       | The element object to interact with. |
+|        | `item`                         | The index of the item to interact with. |
 |        | `relative_word_in_x_direction` | A reference word in x-axis direction to uniquely idenfity element. |
 |        | `relative_word_in_y_direction` | A reference word in y-axis direction to uniquely idenfity element. |
-| `click` | `txtToFind` | The element to find and click on. |
-|        | `exactmatch` | Whether to perform an exact match for the element (boolean). |
-|        | `object` | The element object to interact with. |
-|        | `item` | The index of the item to interact with. |
+| `click` | `txtToFind`                    | The element to find and click on. |
+|        | `exactmatch`                   | Whether to perform an exact match for the element (boolean). |
+|        | `object`                       | The element object to interact with. |
+|        | `item`                         | The index of the item to interact with. |
 |        | `relative_word_in_x_direction` | A reference word in x-axis direction to uniquely idenfity element. |
 |        | `relative_word_in_y_direction` | A reference word in y-axis direction to uniquely idenfity element. |
-|        | `hover` | Whether to hover over the element instead of clicking it (boolean). |
-| `scroll` | `direction` | The direction of scrolling ("up", "down", "left", "right"). |
-|        | `clicks` | The number of times to scroll. |
-|        | `txtToFind` | The element to find during scrolling. |
-| `hover` | `txtToFind` | The element to find and hover over. |
-|        | `exactmatch` | Whether to perform an exact match for the element (boolean). |
-|        | `object` | The element object to interact with. |
-|        | `item` | The index of the item to interact with. |
-|        | `relative_to_word_in_x` | A reference word for x-axis positioning. |
-|        | `relative_to_word_in_y` | A reference word for y-axis positioning. |
-|        | `hover` | Whether to hover over the element (boolean). |
+|        | `hover`                        | Whether to hover over the element instead of clicking it (boolean). |
+| `scroll` | `direction`                    | The direction of scrolling ("up", "down", "left", "right"). |
+|        | `clicks`                       | The number of times to scroll. |
+|        | `txtToFind`                    | The element to find during scrolling. |
+|        | `action`                       | Action to be performed after scrolling values = ("move","click").. default 'move'.|
+|        | `exactmatch`                   | Whether to perform an exact match for the element (boolean). |
+| `hover` | `txtToFind`                    | The element to find and hover over. |
+|        | `exactmatch`                   | Whether to perform an exact match for the element (boolean). |
+|        | `object`                       | The element object to interact with. |
+|        | `item`                         | The index of the item to interact with. |
+|        | `relative_to_word_in_x`        | A reference word for x-axis positioning. |
+|        | `relative_to_word_in_y`        | A reference word for y-axis positioning. |
+|        | `hover`                        | Whether to hover over the element (boolean). |
 
 To use these functions, simply import the script and call the desired function with the appropriate arguments.
 
