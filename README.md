@@ -37,7 +37,7 @@ The script provides the following functions:
 |        | `relative_word_in_y_direction` | A reference word in y-axis direction to uniquely idenfity element. |
 |        | `hover`                        | Whether to hover over the element instead of clicking it (boolean). |
 | `scroll` | `direction`                    | The direction of scrolling ("up", "down", "left", "right"). |
-|        | `clicks`                       | The number of times to scroll. |
+|        | `scrolls`                       | The number of times to scroll. |
 |        | `txtToFind`                    | The element to find during scrolling. |
 |        | `action`                       | Action to be performed after scrolling values = ("move","click").. default 'move'.|
 |        | `exactmatch`                   | Whether to perform an exact match for the element (boolean). |

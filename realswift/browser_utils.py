@@ -2,7 +2,10 @@ import os
 import subprocess
 import time
 import shutil
+
+import psutil
 import pygetwindow as gw
+from reporter import generate_html
 from config_module import config
 edge_browser_path = config.edge_browser_path
 chrome_browser_path = config.chrome_browser_path
@@ -12,7 +15,8 @@ options = config.options.split(";")
 window_chk = any("--window-size" in element for element in options)
 if window_chk:
     options.append("--window-position=0,0")
-def init_browser(url):
+def open_browser(url):
+    global proc
    # try:
     if os.path.isdir(screenshots_folder):
         shutil.rmtree(screenshots_folder)
@@ -23,13 +27,17 @@ def init_browser(url):
 
 
     if browser == "chrome":
-        os.system("taskkill /f /im chrome.exe")
-        subprocess.Popen([chrome_browser_path, url]+options)
+        proc = subprocess.Popen([chrome_browser_path, url]+options,stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    shell=True)
     elif browser == "edge":
-        os.system("taskkill /f /im msedge.exe")
-        subprocess.Popen([edge_browser_path, url]+options)
+        proc = subprocess.Popen([edge_browser_path, url]+options,stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    shell=True)
     time.sleep(2)
-
+def tear_down():
+    proc.kill
+    exit(0)
 def _activate_window():
     try:
         if browser == "chrome":

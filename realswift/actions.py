@@ -1,28 +1,45 @@
-import time
-import datetime
 import shutil
+import time
+
 import pyautogui
-from config_module import config
-from image_utils import _find_image,_take_screenshot
-from ocr_utils import _perform_ocr,_analyse_ocr_results
+import datetime
+
 import browser_utils as br
-timeout = config.timeout
-offsetx = config.offsetx
-offsety = config.offsety
+from config_module import config
+from image_utils import _take_screenshot
+from internal import _wait_for_element
+import internal
+from ocr_utils import _perform_ocr
+from realswift.exceptions import InvalidScrollOptionException, ElementNotFoundException
+from reporter import report
+retries = config.retries
 screenshots_folder = config.screenshots_folder
+screenshots_path = config.screenshots_path
 output_path = config.output_path
+element_ss_path = config.element_ss_path
+offsetx_default = config.offsetx_default
+offsety_default = config.offsety_default
+
 mousespeed = config.mousespeed
 found = False
 flag_executed = False
-
 def recapture():
     """
         Capture a screenshot and perform Optical Character Recognition (OCR) on it.
     """
     _take_screenshot()
     _perform_ocr()
+def press_key(keyToPress,noOfPresses=1):
+    """
+           Simulate pressing a keyborad button.
+           available values check here : https://pyautogui.readthedocs.io/en/latest/keyboard.html#keyboard-keys
+
+           Args:
+               txtToEnter (str): The keyboard button to press.
+    """
+    pyautogui.press(keyToPress,noOfPresses)
 def type( txtToEnter, txtToFind="", exactmatch=True, object="", item=0, relative_to_word_in_x="",
-         relative_to_word_in_y=""):
+         relative_to_word_in_y="",offsetx=offsetx_default,offsety=offsety_default):
     """
         Simulate typing a string and clicking on a specified element.
 
@@ -35,6 +52,8 @@ def type( txtToEnter, txtToFind="", exactmatch=True, object="", item=0, relative
             relative_to_word_in_x (str): A reference word in x-axis direction to uniquely identify the element.
             relative_to_word_in_y (str): A reference word in y-axis direction to uniquely identify the element.
     """
+    start_time = datetime.datetime.now()
+
     if not txtToFind == "":
         midpoint = _wait_for_element(txtToFind, exactmatch, object, item, relative_to_word_in_x, relative_to_word_in_y)
         x = midpoint[0] - offsetx
@@ -45,52 +64,110 @@ def type( txtToEnter, txtToFind="", exactmatch=True, object="", item=0, relative
     pyautogui.click()
     br._activate_window
     pyautogui.typewrite(txtToEnter)
+    print(f"typed '{txtToEnter}'")
 
+    time_diff = datetime.datetime.now() - start_time
+    time_diff = str(time_diff)[:-4]
+    _take_screenshot()
+    try:
+        now = datetime.datetime.now()
+        new_file_path = f"{screenshots_folder}/old_{screenshots_folder}/element_screenshot_{now.strftime('%Y-%m-%d-%H-%M-%S')}.png"
+        shutil.copyfile(screenshots_path, new_file_path)
+    except Exception as e:
+        print(f"unable to copy analysed_screenshot to old_{screenshots_folder}.. getting exception {e}")
+    report(f"Typed '{txtToEnter}'","Passed",time_diff,new_file_path)
 
-def click(txtToFind, exactmatch=True, object="", item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",
-          hover=False):
+def click(txtToFind, exactmatch=True, item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
     """
     Click on a specified element.
 
-    Args:
+    Args
         txtToFind (str): The element to find and click on.
         exactmatch (bool): Whether to perform an exact match for the element.
         object (str): The element object to interact with.
         item (int): The index of the item to interact with.
         relative_word_in_x_direction (str): A reference word in x-axis direction to uniquely identify the element.
         relative_word_in_y_direction (str): A reference word in y-axis direction to uniquely identify the element.
-        hover (bool): Whether to hover over the element instead of clicking it.
     """
-    midpoint = _wait_for_element(txtToFind, exactmatch, object, item, relative_word_in_x_direction, relative_word_in_y_direction)
+    start_time = datetime.datetime.now()
+
+    midpoint = _wait_for_element(txtToFind, exactmatch,"", item, relative_word_in_x_direction, relative_word_in_y_direction)
     x = midpoint[0] - offsetx
     y = midpoint[1] - offsety
     br._activate_window
     pyautogui.moveTo(x, y, mousespeed)
-    if hover == True:
-        print(f"mouse hovered on the element '{txtToFind}'")
-    else:
-        br._activate_window
-        pyautogui.click()
-        print(f"element '{txtToFind}' clicked")
+    pyautogui.click()
+    print(f"clicked on the element '{txtToFind}'")
 
+    time_diff = datetime.datetime.now() - start_time
+    time_diff = str(time_diff)[:-4]
+    report(f"Clicked on the element '{txtToFind}'","Passed",time_diff,internal.new_file_path)
 
-def scroll( direction, clicks=1, txtToFind="",action="move",exactmatch=True):
+def click_img_object(object, item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
     """
-    Scroll the screen in a specified direction.
+    Click on a specified image object.
+
+    Args
+        txtToFind (str): The element to find and click on.
+        exactmatch (bool): Whether to perform an exact match for the element.
+        object (str): The element object to interact with.
+        item (int): The index of the item to interact with.
+        relative_word_in_x_direction (str): A reference word in x-axis direction to uniquely identify the element.
+        relative_word_in_y_direction (str): A reference word in y-axis direction to uniquely identify the element.
+    """
+    start_time = datetime.datetime.now()
+
+    midpoint = _wait_for_element("", True, object, item, relative_word_in_x_direction, relative_word_in_y_direction)
+    x = midpoint[0] - offsetx
+    y = midpoint[1] - offsety
+    br._activate_window
+    pyautogui.moveTo(x, y, mousespeed)
+    pyautogui.click()
+    print(f"clicked on the img object '{object}'")
+
+    time_diff = datetime.datetime.now() - start_time
+    time_diff = str(time_diff)[:-4]
+    report(f"Clicked on the img object '{object}''","Passed",time_diff,internal.new_file_path)
+
+
+def scroll_find_click(txtToFind,direction="down", scrolls=1,exactmatch=True,offsetx=offsetx_default,offsety=offsety_default):
+    """
+        Scroll the screen in a specified direction and find text and click
+
+        Args:
+            txtToFind (str): The element to find during scrolling.
+            direction (str): The direction of scrolling ("up", "down", "left", "right").
+            scrolls (int): The number of times to scroll.
+            exactmatch (bool): Whether to perform an exact match for the element.
+        """
+    start_time = datetime.datetime.now()
+    midpoint = scroll_find(txtToFind,direction,scrolls,exactmatch)
+    x = midpoint[0] - offsetx
+    y = midpoint[1] - offsety
+    br._activate_window
+    pyautogui.moveTo(x, y, mousespeed)
+    pyautogui.click()
+    time_diff = datetime.datetime.now() - start_time
+    time_diff = str(time_diff)[:-4]
+    print(f"scrolled and clicked on the element '{txtToFind}'")
+    report(f"Scrolled and clicked on the element '{txtToFind}'","Passed",time_diff,internal.new_file_path)
+
+def scroll_find( txtToFind="",direction="down", scrolls=1,exactmatch=True):
+    """
+    Scroll the screen in a specified direction and find text.
 
     Args:
-        direction (str): The direction of scrolling ("up", "down", "left", "right").
-        clicks (int): The number of times to scroll.
         txtToFind (str): The element to find during scrolling.
-        action (str): Action to be performed after scrolling values = ("move","click").. default 'move'.
+        direction (str): The direction of scrolling ("up", "down", "left", "right").
+        scrolls (int): The number of times to scroll.
         exactmatch (bool): Whether to perform an exact match for the element.
     """
     global results
-    scroll_duration = 0.1
     midpoint = False
     found = False
-    start_time = time.time()
-    while not found and time.time() - start_time < timeout:
+    start_try = 0
+    retries = scrolls
+    while not found and start_try < retries:
         if not txtToFind == "":
             _take_screenshot()
             _perform_ocr()
@@ -99,46 +176,54 @@ def scroll( direction, clicks=1, txtToFind="",action="move",exactmatch=True):
             if not midpoint:
                 print(f"element '{txtToFind}' not found after scrolling in {direction} direction...scrolling further")
             else:
-                print(f"element '{txtToFind}' found after scrolling in {direction} direction")
+                #print(f"element '{txtToFind}' found after scrolling in {direction} direction")
                 found = True
                 break
-        if direction == "up":
-            print(f"scrolling {direction}...")
-            for _ in range(clicks):
-                pyautogui.press('up')
-                time.sleep(scroll_duration)
-        elif direction == "down":
-            print(f"scrolling {direction}...")
-            for _ in range(clicks):
-                pyautogui.press('down')
-                time.sleep(scroll_duration)
-        elif direction == "left":
-            print(f"scrolling {direction}...")
-            for _ in range(clicks):
-                pyautogui.press('left')
-                time.sleep(scroll_duration)
-        elif direction == "right":
-            print(f"scrolling {direction}...")
-            for _ in range(clicks):
-                pyautogui.press('right')
-                time.sleep(scroll_duration)
-        if txtToFind == "":
-            break
+        scroll(direction,scrolls)
+        start_try = start_try + 1
+    if not found:
+        try:
+            raise Exception(f"element '{txtToFind}' not found within {retries} scrolls...exiting the script")
+        except ElementNotFoundException as ce:
+            print(f"Caught an exception: {ce.message}")
+            report(f"Element '{txtToFind}' not found", "Failed", "NA", screenshots_path)
+            br.tear_down()
+            exit(1)
+        exit(1)
     results = []
-    if found:
-        x = midpoint[0] - offsetx
-        y = midpoint[1] - offsety
-        br._activate_window
-        pyautogui.moveTo(x, y, mousespeed)
-        if action == "click":
-            br._activate_window
-            pyautogui.click()
-            print(f"element '{txtToFind}' clicked")
+    return midpoint
+
+def scroll(direction="down",scrolls=1):
+    scroll_duration = 0.1
+    if direction == "up":
+        print(f"scrolling {direction}...")
+        for _ in range(scrolls):
+            pyautogui.press('up')
+            time.sleep(scroll_duration)
+    elif direction == "down":
+        print(f"scrolling {direction}...")
+        for _ in range(scrolls):
+            pyautogui.press('down')
+            time.sleep(scroll_duration)
+    elif direction == "left":
+        print(f"scrolling {direction}...")
+        for _ in range(scrolls):
+            pyautogui.press('left')
+            time.sleep(scroll_duration)
+    elif direction == "right":
+        print(f"scrolling {direction}...")
+        for _ in range(scrolls):
+            pyautogui.press('right')
+            time.sleep(scroll_duration)
+    else:
+        try:
+            raise InvalidScrollOptionException("not a valid scroll input")
+        except InvalidScrollOptionException as ce:
+            print(f"Caught an exception: {ce.message}")
+            exit(1)
 
 
-
-def hover(txtToFind, exactmatch=True, object="", item=0, relative_to_word_in_x="", relative_to_word_in_y="",
-          hover=True):
+def hover(txtToFind, exactmatch=True, object="", item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
     """
         Hover over a specified element.
 
@@ -151,77 +236,18 @@ def hover(txtToFind, exactmatch=True, object="", item=0, relative_to_word_in_x="
             relative_to_word_in_y (str): A reference word in y-axis direction to uniquely identify the element.
             hover (bool): Whether to hover over the element.
     """
-    click(txtToFind, exactmatch, object, item, relative_to_word_in_x, relative_to_word_in_y, hover)
+    start_time = datetime.datetime.now()
 
-def _wait_for_element(txt, exactmatch, object, item, relative_to_word_in_x, relative_to_word_in_y, scroll=False):
-    """
-    Wait for a page element to appear.
+    midpoint = _wait_for_element(txtToFind, exactmatch, object, item, relative_word_in_x_direction,
+                                 relative_word_in_y_direction)
+    x = midpoint[0] - offsetx
+    y = midpoint[1] - offsety
+    br._activate_window
+    pyautogui.moveTo(x, y, mousespeed)
+    print(f"hovered on the element '{txtToFind}'")
 
-    Args:
-        txt (str): The text to wait for on the page.
-        exactmatch (bool): Whether to perform an exact match for the element.
-        object (str): The element object to interact with.
-        item (int): The index of the item to interact with.
-        relative_to_word_in_x (str): A reference word in x-axis direction to uniquely identify the element.
-        relative_to_word_in_y (str): A reference word in y-axis direction to uniquely identify the element.
-        scroll (bool): Whether to perform scrolling if the element is not found.
+    time_diff = datetime.datetime.now() - start_time
+    time_diff = str(time_diff)[:-4]
+    report(f"Hovered on the element '{txtToFind}'","Passed",time_diff,internal.new_file_path)
 
-    Returns:
-        tuple: The coordinates of the found element.
-    """
-    start_time = time.time()
-    global found
-    found = False
-    exc = None
-    stck = None
 
-    while not found and time.time() - start_time < timeout:
-        try:
-            if not object == "":
-                if not relative_to_word_in_x == "":
-                    midpointR = _analyse_ocr_results(relative_to_word_in_x, exactmatch, )
-                    midpoint = _find_image(object, item, midpointRY=midpointR[1])
-                elif not relative_to_word_in_y == "":
-                    midpointR = _analyse_ocr_results(relative_to_word_in_y, exactmatch, )
-                    midpoint = _find_image(object, item, midpointRX=midpointR[0])
-                else:
-                    midpoint = _find_image(object)
-                found = True
-                break
-            else:
-                if not relative_to_word_in_x == "":
-                    midpointR = _analyse_ocr_results(relative_to_word_in_x, exactmatch, item)
-                    midpoint = _analyse_ocr_results(txt, exactmatch, item, midpointRY=midpointR[1])
-                elif not relative_to_word_in_y == "":
-                    top_leftR = _analyse_ocr_results(relative_to_word_in_y, exactmatch, item, y_axis=True)
-                    midpoint = _analyse_ocr_results(txt, exactmatch, item, top_leftRX=top_leftR)
-                else:
-                    midpoint = _analyse_ocr_results(txt, exactmatch, item)
-                found = True
-                print(f"element '{txt}' found at location {midpoint} on the webpage")
-                try:
-                    now = datetime.datetime.now()
-                    new_file_name = f"analysed_screenshot_{now.strftime('%Y-%m-%d-%H-%M-%S')}.png"
-                    shutil.copyfile(output_path, screenshots_folder + "/old_" + screenshots_folder + "/" + new_file_name)
-                except Exception as e:
-                    print(f"unable to copy analysed_screenshot to old_{screenshots_folder}.. getting exception {e}")
-                break
-        except Exception as e:
-            print(f"element '{txt}' not found...reading text from the webpage again")
-            exc = e
-        time.sleep(1)
-        if not scroll:
-            _take_screenshot()
-        if object == "" and not scroll:
-            _perform_ocr()
-        elif object != "":
-            if relative_to_word_in_y != "" or relative_to_word_in_x != "":
-                _perform_ocr()
-        if scroll:
-            midpoint = False
-            break
-    if not found and not scroll:
-        print(f"element '{txt}' not found within {timeout} secs...exiting the script")
-        raise exc
-        exit(1)
-    return midpoint

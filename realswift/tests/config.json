@@ -1,5 +1,5 @@
 {
-  "browser": "chrome",
-  "timeout": 20,
-  "options": "--window-size=1920,680;--incognito"
+  "browser": "edge",
+  "retries": 5,
+  "options": "--window-size=1920,680;--inprivate"
 }

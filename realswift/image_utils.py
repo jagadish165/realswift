@@ -5,7 +5,8 @@ import pyautogui
 from config_module import config
 browser = config.browser
 screenshots_path = config.screenshots_path
-output_path = config.output_path
+img_objects_folder = config.img_objects_folder
+element_ss_path = config.element_ss_path
 
 def _take_screenshot():
     """
@@ -26,8 +27,16 @@ def _take_screenshot():
 
     if active_window is not None:
         active_window = active_window[0]
-        active_window.activate()
-        #_activate_window()
+        try:
+            active_window.activate()
+        except Exception as e:
+            print("unable to activate edge window.. trying again")
+        try:
+            active_window.activate()
+        except Exception as e:
+            print(f"unable to activate edge window..Caught exception {e}")
+            exit(1)
+                #_activate_window()
         # Get the position and size of the active window
         window_x, window_y, window_width, window_height = active_window.left, active_window.top, active_window.width, active_window.height
 
@@ -61,7 +70,7 @@ def _find_image(object, item=0, midpointRX=-1, midpointRY=-1):
     """
     _take_screenshot()
     larger_image = cv2.imread(screenshots_path)
-    template = cv2.imread(f'objects/{object}.png')
+    template = cv2.imread(f'{img_objects_folder}/{object}')
     result = cv2.matchTemplate(larger_image, template, cv2.TM_CCORR_NORMED)
     # cv2.normalize(result, result, 0, 1, cv2.NORM_MINMAX)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
@@ -78,14 +87,17 @@ def _find_image(object, item=0, midpointRX=-1, midpointRY=-1):
         if not midpointRX == -1:
             if abs(midpointRX - midpointX) < 5:
                 midpoint = midpointX, midpointY
+                break
         elif not midpointRY == -1:
             #print(f'midpoint diff of {midpointRY},{midpointY}=={abs(midpointRY - midpointY)}')
             if abs(midpointRY - midpointY) < 5:
                 midpoint = midpointX, midpointY
+                break
         elif item == i:
             midpoint = midpointX, midpointY
-        cv2.rectangle(larger_image, top_left, bottom_right, (0, 0, 255), 2)
+            break
         i += 1
-    cv2.imwrite(output_path, larger_image)
+    cv2.rectangle(larger_image, top_left, bottom_right, (0, 0, 255), 2)
+    cv2.imwrite(element_ss_path, larger_image)
     print(f"element '{object}' found at the location {midpointX},{midpointY} on the webpage with confidence: {max_val}")
     return midpoint
