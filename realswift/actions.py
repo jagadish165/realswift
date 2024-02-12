@@ -29,33 +29,47 @@ def recapture():
     """
     _take_screenshot()
     _perform_ocr()
-def press_key(keyToPress,noOfPresses=1):
+def press_keys(keyToPress,noOfPresses=1):
     """
            Simulate pressing a keyborad button.
            available values check here : https://pyautogui.readthedocs.io/en/latest/keyboard.html#keyboard-keys
 
            Args:
-               txtToEnter (str): The keyboard button to press.
+               keyToPress (str): The keyboard button to press.
     """
+    br._activate_window
     pyautogui.press(keyToPress,noOfPresses)
-def type( txtToEnter, txtToFind="", exactmatch=True, object="", item=0, relative_to_word_in_x="",
+def type_keys(txtToEnter):
+    """
+           Type text.
+           available values check here : https://pyautogui.readthedocs.io/en/latest/keyboard.html#keyboard-keys
+
+           Args:
+               txtToEnter (str): The text to type.
+    """
+    br._activate_window
+    pyautogui.typewrite(txtToEnter)
+    print(f"typed '{txtToEnter}'")
+def type( txtToEnter, txtToFind, exactmatch=True, item=0, relative_to_word_in_x="",
          relative_to_word_in_y="",offsetx=offsetx_default,offsety=offsety_default):
     """
         Simulate typing a string and clicking on a specified element.
 
         Args:
             txtToEnter (str): The text to type.
-            txtToFind (str): The element to find and click on.
+            txtToFind (str): The element to find and type.
             exactmatch (bool): Whether to perform an exact match for element.
-            object (str): The element object to interact with.
             item (int): The index of the item to interact with.
             relative_to_word_in_x (str): A reference word in x-axis direction to uniquely identify the element.
             relative_to_word_in_y (str): A reference word in y-axis direction to uniquely identify the element.
+            offsetx (int): Offset for the identified x-coordinate
+            offsety (int): Offset for the identified y-coordinate
+
     """
     start_time = datetime.datetime.now()
 
     if not txtToFind == "":
-        midpoint = _wait_for_element(txtToFind, exactmatch, object, item, relative_to_word_in_x, relative_to_word_in_y)
+        midpoint = _wait_for_element(txtToFind, exactmatch, "", item, relative_to_word_in_x, relative_to_word_in_y)
         x = midpoint[0] - offsetx
         y = midpoint[1] - offsety
         br._activate_window
@@ -75,7 +89,7 @@ def type( txtToEnter, txtToFind="", exactmatch=True, object="", item=0, relative
         shutil.copyfile(screenshots_path, new_file_path)
     except Exception as e:
         print(f"unable to copy analysed_screenshot to old_{screenshots_folder}.. getting exception {e}")
-    report(f"Typed '{txtToEnter}'","Passed",time_diff,new_file_path)
+    report(f"Found element '{txtToFind}' and typed '{txtToEnter}'","Passed",time_diff,new_file_path)
 
 def click(txtToFind, exactmatch=True, item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
     """
@@ -88,6 +102,8 @@ def click(txtToFind, exactmatch=True, item=0, relative_word_in_x_direction="", r
         item (int): The index of the item to interact with.
         relative_word_in_x_direction (str): A reference word in x-axis direction to uniquely identify the element.
         relative_word_in_y_direction (str): A reference word in y-axis direction to uniquely identify the element.
+        offsetx (int): Offset for the identified x-coordinate
+        offsety (int): Offset for the identified y-coordinate
     """
     start_time = datetime.datetime.now()
 
@@ -105,15 +121,15 @@ def click(txtToFind, exactmatch=True, item=0, relative_word_in_x_direction="", r
 
 def click_img_object(object, item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
     """
-    Click on a specified image object.
+    Click on a specified image object.(Take screenshot and place in img_objects folder ex:-submit.png)
 
     Args
-        txtToFind (str): The element to find and click on.
-        exactmatch (bool): Whether to perform an exact match for the element.
         object (str): The element object to interact with.
         item (int): The index of the item to interact with.
         relative_word_in_x_direction (str): A reference word in x-axis direction to uniquely identify the element.
         relative_word_in_y_direction (str): A reference word in y-axis direction to uniquely identify the element.
+        offsetx (int): Offset for the identified x-coordinate
+        offsety (int): Offset for the identified y-coordinate
     """
     start_time = datetime.datetime.now()
 
@@ -139,6 +155,8 @@ def scroll_find_click(txtToFind,direction="down", scrolls=1,exactmatch=True,offs
             direction (str): The direction of scrolling ("up", "down", "left", "right").
             scrolls (int): The number of times to scroll.
             exactmatch (bool): Whether to perform an exact match for the element.
+            offsetx (int): Offset for the identified x-coordinate
+            offsety (int): Offset for the identified y-coordinate
         """
     start_time = datetime.datetime.now()
     midpoint = scroll_find(txtToFind,direction,scrolls,exactmatch)
@@ -152,7 +170,7 @@ def scroll_find_click(txtToFind,direction="down", scrolls=1,exactmatch=True,offs
     print(f"scrolled and clicked on the element '{txtToFind}'")
     report(f"Scrolled and clicked on the element '{txtToFind}'","Passed",time_diff,internal.new_file_path)
 
-def scroll_find( txtToFind="",direction="down", scrolls=1,exactmatch=True):
+def scroll_find( txtToFind,direction="down", scrolls=1,exactmatch=True):
     """
     Scroll the screen in a specified direction and find text.
 
@@ -223,22 +241,23 @@ def scroll(direction="down",scrolls=1):
             exit(1)
 
 
-def hover(txtToFind, exactmatch=True, object="", item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
+def hover(txtToFind, exactmatch=True, item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
     """
         Hover over a specified element.
 
         Args:
             txtToFind (str): The element to find and hover over.
             exactmatch (bool): Whether to perform an exact match for the element.
-            object (str): The element object to interact with.
             item (int): The index of the item to interact with.
             relative_to_word_in_x (str): A reference word in x-axis direction to uniquely identify the element.
             relative_to_word_in_y (str): A reference word in y-axis direction to uniquely identify the element.
             hover (bool): Whether to hover over the element.
+            offsetx (int): Offset for the identified x-coordinate
+            offsety (int): Offset for the identified y-coordinate
     """
     start_time = datetime.datetime.now()
 
-    midpoint = _wait_for_element(txtToFind, exactmatch, object, item, relative_word_in_x_direction,
+    midpoint = _wait_for_element(txtToFind, exactmatch, "", item, relative_word_in_x_direction,
                                  relative_word_in_y_direction)
     x = midpoint[0] - offsetx
     y = midpoint[1] - offsety
@@ -250,4 +269,28 @@ def hover(txtToFind, exactmatch=True, object="", item=0, relative_word_in_x_dire
     time_diff = str(time_diff)[:-4]
     report(f"Hovered on the element '{txtToFind}'","Passed",time_diff,internal.new_file_path)
 
+def hover_img_object(object, item=0, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
+    """
+    Hover on a specified image object.(Take screenshot and place in img_objects folder ex:-submit.png)
 
+    Args
+        object (str): The image object to interact with.
+        item (int): The index of the item to interact with.
+        relative_word_in_x_direction (str): A reference word in x-axis direction to uniquely identify the element.
+        relative_word_in_y_direction (str): A reference word in y-axis direction to uniquely identify the element.
+        offsetx (int): Offset for the identified x-coordinate
+        offsety (int): Offset for the identified y-coordinate
+    """
+    start_time = datetime.datetime.now()
+
+    midpoint = _wait_for_element("", True, object, item, relative_word_in_x_direction, relative_word_in_y_direction)
+    x = midpoint[0] - offsetx
+    y = midpoint[1] - offsety
+    br._activate_window
+    pyautogui.moveTo(x, y, mousespeed)
+    pyautogui.click()
+    print(f"clicked on the img object '{object}'")
+
+    time_diff = datetime.datetime.now() - start_time
+    time_diff = str(time_diff)[:-4]
+    report(f"Hovered on the img object '{object}''","Passed",time_diff,internal.new_file_path)

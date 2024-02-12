@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
 	name="realswift",
-	version="2.1.0",
+	version="3.0.1",
 	author="Jagadish Dabbiru",
 	author_email="jagadish.dabbiru@gmail.com",
 	packages=["realswift"],
@@ -10,7 +10,7 @@ setuptools.setup(
 	long_description="This project performs user interactions with OpenCV2 by integrating the PyAutoGUI library alongside custom utility functions. The script offers a range of functionalities, including simulating user actions like typing, clicking, scrolling, and hovering. These actions are executed within a defined window or specific area, enhancing the automation of user interactions",
 	long_description_content_type="text/markdown",
 	url="https://github.com/jagadish165/realswift",
-	license='Apache',
+	license='BSD-2-Clause',
 	python_requires='>=3.8',
 	install_requires=[]
 )

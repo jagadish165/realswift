@@ -1,5 +1,5 @@
 {
-  "browser": "edge",
+  "browser": "chrome",
   "retries": 5,
-  "options": "--window-size=1920,680;--inprivate"
+  "options": "--window-size=1020,680;--in-cognito;--new-window "
 }
