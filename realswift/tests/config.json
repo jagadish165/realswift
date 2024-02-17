@@ -1,5 +1,7 @@
 {
-  "browser": "chrome",
+  "browser": "edge",
+  "browser_path": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
   "retries": 5,
-  "options": "--window-size=1020,680;--in-cognito;--new-window "
+  "options": "--in-cognito;--new-window"
+
 }

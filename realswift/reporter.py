@@ -56,7 +56,7 @@ def generate_html():
                     height: 100%;
                     background-color: rgba(0, 0, 0, 0.7);
                     justify-content: center;
-                    align-items: center;
+                    align-item_positions: center;
                 }}
 
                 #modalContent {{

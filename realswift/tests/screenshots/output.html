@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>HTML Report</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                }
+        
+                table {
+                    width: 70%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                }
+        
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    text-align: left;
+                }
+        
+                th {
+                    background-color: #f2f2f2;
+                }
+        
+                tr {
+                    height: 100px;
+                }
+
+        
+                img {
+                    max-width: 50%;
+                    height: auto;
+                    cursor: grab
+                }
+                #imageModal {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.7);
+                    justify-content: center;
+                    align-item_positions: center;
+                }
+
+                #modalContent {
+                    text-align: center;
+                }
+        
+                #modalImage {
+                    max-width: 80%;
+                    max-height: 80%;
+                    border: 2px solid #fff;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+            </style>
+            <script>
+        function openImageModal(imageSrc) {
+            var modal = document.getElementById('imageModal');
+            var modalImg = document.getElementById('modalImage');
+            modalImg.src = imageSrc;
+            modal.style.display = 'flex';
+            }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+    </script>
+        </head>
+        <body>
+        
+        <h1>HTML Report</h1>
+        <h3>Date: 17-Feb-2024 22:25:50 Hrs</h3>        
+        <table>
+            <tr>
+                <th width="50%">Step</th>
+                <th width="10%">Result</th>
+                <th width="10%">Time Taken</th>
+                <th width="30%">Screenshot</th>
+            </tr>
+            
+        <tr>
+        <td>Clicked on the element 'Search Amazon.in'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:16.20</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-23-45.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-23-45.png')"></td>
+        </tr>
+        
+        <tr>
+        <td>Scrolled and clicked on the element 'Apple Watch Series 9'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:28.24</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-24-14.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-24-14.png')"></td>
+        </tr>
+        
+        <tr>
+        <td>Clicked on the element 'Bank offer'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:26.13</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-24-40.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-24-40.png')"></td>
+        </tr>
+        
+        <tr>
+        <td>Clicked on the element 'See details'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:13.58</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-24-54.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-24-54.png')"></td>
+        </tr>
+        
+        <tr>
+        <td>Clicked on the element 'Offer 2'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:00.73</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-24-54.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-24-54.png')"></td>
+        </tr>
+        
+        <tr>
+        <td>Clicked on the element 'Back'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:16.60</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-25-12.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-25-12.png')"></td>
+        </tr>
+        
+        <tr>
+        <td>Clicked on the element 'Bank offer'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:00.75</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-25-12.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-25-12.png')"></td>
+        </tr>
+        
+        <tr>
+        <td>Scrolled and clicked on the element 'Buy Now'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:26.10</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-25-39.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-25-39.png')"></td>
+        </tr>
+        
+        <tr>
+        <td>Clicked on the element 'create your amazon account'</td>
+        <td style="color: #46C646; font-weight: bold">Passed</td>
+         <td>0:00:11.05</td>
+        <td><img src='../screenshots/old_screenshots/element_screenshot_2024-02-17-22-25-50.png' alt="Screenshot" onclick="openImageModal('../screenshots/old_screenshots/element_screenshot_2024-02-17-22-25-50.png')"></td>
+        </tr>
+        
+        </table>
+          <div id="imageModal" onclick="closeImageModal()">
+            <div id="modalContent">
+                <img id="modalImage" src="" alt="Modal Image">
+            </div>
+        </div>
+        </body>
+        </html>
+        

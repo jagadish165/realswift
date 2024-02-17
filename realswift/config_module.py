@@ -4,8 +4,7 @@ import os
 
 class MyPackageConfig:
     def __init__(self):
-        self.chrome_browser_path = "C:/Program Files/Google/Chrome/Application/chrome.exe"
-        self.edge_browser_path = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
+        self.browser_path = "C:/Program Files/Google/Chrome/Application/chrome.exe"
         self.offsetx_default = 0
         self.offsety_default = 0
         self.mousespeed = 0.2
@@ -20,10 +19,9 @@ class MyPackageConfig:
             with open(file_path, 'r') as file:
                 config_data = json.load(file)
                 print('properties loaded from config.json file')
-                self.chrome_browser_path = config_data.get('chrome_browser_path', self.chrome_browser_path)
+                self.browser_path = config_data.get('browser_path', self.browser_path)
                 self.offsetx_default = config_data.get('offsetx_default', self.offsetx_default)
                 self.offsety_default = config_data.get('offsety_default', self.offsety_default)
-                self.edge_browser_path = config_data.get('edge_browser_path', self.edge_browser_path)
                 self.mousespeed = config_data.get('mousespeed', self.mousespeed)
                 self.screenshots_folder = config_data.get('screenshots_folder', self.screenshots_folder)
                 self.img_objects_folder = config_data.get('img_objects_folder', self.img_objects_folder)

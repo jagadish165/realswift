@@ -1,34 +1,57 @@
-# realswift
-AI automation tool leverages a cognitive approach inspired by the human brain's intuitive understanding of web interfaces.
+# Realswift
+[![PyPI version](https://badge.fury.io/py/realswift.svg)](https://badge.fury.io/py/realswift)
 
-*Attention: Please note that this project requires substantial CPU and GPU resources to ensure faster outcomes. The higher the Computer specifications, the faster the results can be obtained.*
+Realswift is an AI automation tool leverages a cognitive approach inspired by the human brain's intuitive understanding of web interfaces.
 
-Break free from DOM (Xpaths,CSS etc.,) with AI-powered automation. Eliminate the traditional, often repetitive, and manual process of specifying or identifying specific elements (like buttons, links, or fields) on a web page using Document Object Model (DOM) selectors.
+#### Attention: 
+
+*Please note that this project requires powerful CPU and GPU resources to get faster execution times. The higher the Computer specifications, the faster the results can be obtained.*
+
+#### Why Realswift?
+
+Break free from DOM identifications (Xpaths,CSS etc.,) with AI-powered automation. Eliminate the traditional, often repetitive, and manual tedious process of specifying or identifying web elements with DOM Xpath, CSS selectors (like buttons, links, or fields).
+
+This project is crafted to automate user interactions with Open Source Computer Vision Library. This offers various functionalities to replicate user actions, including typing, clicking, scrolling, and hovering, within a designated window or defined area.
+
+
+|        | Linux | macOS | Windows |
+|:-------| :---: | :---: | :---:   |
+| Chrome | ✅ | ✅ | ✅ |
+| Edge   | ✅ | ✅ | ✅ |
+| Firfox | ✅ | ✅ | ✅ |
 
 
 
-This project is crafted to automate user interactions with OpenCV2 utilizing the PyAutoGUI library alongside custom utility functions. The script offers various functionalities to replicate user actions, including typing, clicking, scrolling, and hovering, within a designated window or defined area.
-Prerequisites
-Before using this script, make sure you have the following prerequisites installed:
+## Getting Started:
 
-Python: 
+### Prerequisites
 
 Ensure you have Python <=3.11 installed on your system.(above 3.11 doesn't work for some of the pyTorch components)
 
-Required dependency packages: 
+### Installation:
 
-Install the necessary packages, which are listed in the requirements.txt file. You can install them using pip:
-````
-pip install -r requirements.txt
-````
-Install pytorch:
-````
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-````
 Install realswift latest version:
 ````
 pip install realswift
 ````
+Install pytorch with Cuda for GPU enabled machines:
+````
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+````
+###### Additional Packages for Linux Users
+
+If you are using Linux, you may need to install the following additional packages:
+
+- **ImageMagick**
+- **Xvfb (X virtual framebuffer)**
+- **tkinter**
+- **xlib**
+
+Set 0 for DISPLAY variable 
+
+````export DISPLAY-:0````
+
+### Usage
 
 Create .py files and run the following example scripts.
 
@@ -37,7 +60,7 @@ Create .py files and run the following example scripts.
 Scenario: 
 * Open Amazon India website.
 * Search for "apple watch".
-* Scroll down and select "Apple Watch Ultra 2".
+* Scroll down and select "Apple Watch Series 9".
 * View bank offers and details.
 * Navigate back.
 * Proceed to checkout.
@@ -46,18 +69,17 @@ Scenario:
 from realswift.actions import *
 from realswift.browser_utils import open_browser
 
-open_browser("https://www.amazon.in")
-click("Search Amazon.in")
-type("apple watch")
-press_keys("enter")
-scroll_find_click("Apple Watch Ultra 2","down",10,exactmatch=False)
-click("Bank offer")
-click("See details >",item=1,offsety=3)
-click("Offer 2")
-scroll("down",4)
-click("Back")
-click("Bank offer")
-scroll_find_click("Buy Now",scrolls=4)
+open_browser("https://www.amazon.in")                                   #Opens amazon.in browser
+click("Search Amazon.in")                                               #Tries to identify "Search Amazon.in" string from the website and clicks it  
+type_keys("apple watch")                                                #Enters "apple watch" in the search field
+press_keys("enter")                                                     #Clicks enter 
+scroll_find_click("Apple Watch Series 9","down",10,exactmatch=False)    #Tries to identify "Apple Watch Series 9" substring by scrolling down 10 times 
+click("Bank offer")                                                     #Tries to identify "Bank offer" string from the website and clicks it
+click("See details",item_position=2,exactmatch=False,offsety=3)                  #Tries to identify second "See details" string from the website and clicks offset of 3 pixels" 
+click("Offer 2")                                                        #Tries to identify "Offer 2" string from the website and clicks it 
+scroll("down",4)                                                        #Scrolls down 4 times             
+click("Back")                                                           #Tries to identify "Back" string from the website and clicks it 
+scroll_find_click("Buy Now",scrolls=4)                                  #Tries to identify "Buy now" string by scrolling down 10 times
 ````
 
 **Example Script 2:**
@@ -68,7 +90,7 @@ Scenario:
 * Clicks on "Hand Wash".
 * Scrolls to find prices and products under ₹500.
 * Scrolls to find discounts and products with 30% discount or less.
-* Scrolls back to "Bath & Body" category and clicks on the second item.
+* Scrolls back to "Bath & Body" category and clicks on the second item_position.
 ````
 from realswift.browser_utils import open_browser
 from realswift.actions import *
@@ -82,15 +104,16 @@ scroll_find_click("500","down",5,False)
 scroll_find_click("Disdcount","down",5)
 scroll_find_click("30% And","down",5,False)
 scroll_find("Bath & Body","down",5,False)
-click("Bath & Body",exactmatch=False,item=2)
+click("Bath & Body",exactmatch=False,item_position=2)
 ````
-Configuration: Create a config.json file and adjust the following default configuration parameters in the config.json file.
+### Configuration: 
+
+Create a config.json file and adjust the following default configuration parameters in the config.json file.
 
 (Note:- You can skip creating config.json or skip adding one or more parameters to take below default values)
 ````
 {
-  "chrome_browser_path": "C:/Program Files/Google/Chrome/Application/chrome.exe",
-  "edge_browser_path": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "browser_path": "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "offsetx_default": 0,
   "offsety_default": 0,
   "mousespeed": 0.2,
@@ -101,61 +124,69 @@ Configuration: Create a config.json file and adjust the following default config
   "options": "--start-maximized"
 }
 ````
-# Automation Functions Documentation
+### Image Identification
 
-markdown
+If there are web elements which doesn't have readable text ex:- icons,logos..etc., then use Image identification methods.
 
-| Method                | Parameter                      | Description                                       | Default Value |
-|-----------------------|--------------------------------|---------------------------------------------------|---------------|
-| `press_keys`          | `keyToPress`                   | The keyboard button to press.                    | None(*Mandatory parameter*)          |
-|                       | `noOfPresses`                  | The number of times to press the key.            | 1             |
-| `type_keys`           | `txtToEnter`                   | The text to type.                                 | None(*Mandatory parameter*)          |
-| `type`                | `txtToEnter`                   | The text to type.                                 | None(*Mandatory parameter*)          |
-|                       | `txtToFind`                    | The element to find and type.                     | None(*Mandatory parameter*)          |
-|                       | `exactmatch`                   | Whether to perform an exact match for the element.| True          |
-|                       | `item`                         | The index of the item to interact with.           | 0             |
-|                       | `relative_to_word_in_x`        | A reference word in the x-axis direction.        | ""            |
-|                       | `relative_to_word_in_y`        | A reference word in the y-axis direction.        | ""            |
-|                       | `offsetx`                      | Offset for the identified x-coordinate.          | config.offsetx_default |
-|                       | `offsety`                      | Offset for the identified y-coordinate.          | config.offsety_default |
-| `click`               | `txtToFind`                    | The element to find and click on.                | None(*Mandatory parameter*)          |
-|                       | `exactmatch`                   | Whether to perform an exact match for the element.| True          |
-|                       | `item`                         | The index of the item to interact with.           | 0             |
-|                       | `relative_word_in_x_direction` | A reference word in the x-axis direction.        | ""            |
-|                       | `relative_word_in_y_direction` | A reference word in the y-axis direction.        | ""            |
-|                       | `offsetx`                      | Offset for the identified x-coordinate.          | config.offsetx_default |
-|                       | `offsety`                      | Offset for the identified y-coordinate.          | config.offsety_default |
-| `click_img_object`    | `object`                       | The image object to interact with.               | None(*Mandatory parameter*)          |
-|                       | `item`                         | The index of the item to interact with.           | 0             |
-|                       | `relative_word_in_x_direction` | A reference word in the x-axis direction.        | ""            |
-|                       | `relative_word_in_y_direction` | A reference word in the y-axis direction.        | ""            |
-|                       | `offsetx`                      | Offset for the identified x-coordinate.          | config.offsetx_default |
-|                       | `offsety`                      | Offset for the identified y-coordinate.          | config.offsety_default |
-| `scroll_find_click`   | `txtToFind`                    | The element to find during scrolling.            | None(*Mandatory parameter*)          |
-|                       | `direction`                    | The direction of scrolling ("up", "down", etc.).  | "down"        |
-|                       | `scrolls`                      | The number of times to scroll.                   | 1             |
-|                       | `exactmatch`                   | Whether to perform an exact match for the element.| True          |
-|                       | `offsetx`                      | Offset for the identified x-coordinate.          | config.offsetx_default |
-|                       | `offsety`                      | Offset for the identified y-coordinate.          | config.offsety_default |
-| `scroll_find`         | `txtToFind`                    | The element to find during scrolling.            | None(*Mandatory parameter*)          |
-|                       | `direction`                    | The direction of scrolling ("up", "down", etc.).  | "down"        |
-|                       | `scrolls`                      | The number of times to scroll.                   | 1             |
-|                       | `exactmatch`                   | Whether to perform an exact match for the element.| True          |
-| `scroll`              | `direction`                    | The direction of scrolling ("up", "down", etc.).  | "down"        |
-|                       | `scrolls`                      | The number of times to scroll.                   | 1             |
-| `hover`               | `txtToFind`                    | The element to find and hover over.               | None(*Mandatory parameter*)          |
-|                       | `exactmatch`                   | Whether to perform an exact match for the element.| True          |
-|                       | `item`                         | The index of the item to interact with.           | 0             |
-|                       | `relative_word_in_x_direction` | A reference word in the x-axis direction.        | ""            |
-|                       | `relative_word_in_y_direction` | A reference word in the y-axis direction.        | ""            |
-|                       | `offsetx`                      | Offset for the identified x-coordinate.          | config.offsetx_default |
-|                       | `offsety`                      | Offset for the identified y-coordinate.          | config.offsety_default |
-| `hover_img_object`    | `object`                       | The image object to interact with.               | None(*Mandatory parameter*)          |
-|                       | `item`                         | The index of the item to interact with.           | 0             |
-|                       | `relative_word_in_x_direction` | A reference word in the x-axis direction.        | ""            |
-|                       | `relative_word_in_y_direction` | A reference word in the y-axis direction.        | ""            |
-|                       | `offsetx`                      | Offset for the identified x-coordinate.          | config.offsetx_default |
-|                       | `offsety`                      | Offset for the identified y-coordinate.          | config.offsety_default |
+Create [img_objects](realswift/tests/img_objects)  folder in the same directory. Take screenshot of the webpage, crop image of the web object and place inside the folder. Click the object using image related functions defined in the lower section. 
+
+### Output:
+
+After the execution, [screenshots](realswift/tests/screenshots) folder will be created in the same directory and [report file](realswift/tests/screenshots/output.html) will be generated inside it. You can check various identified webpage screenshots through out the execution.
+
+## Automation Functions Documentation
+
+| Method                | Parameter                      | Description                                | Default Value               |
+|-----------------------|--------------------------------|--------------------------------------------|-----------------------------|
+| `press_keys`          | `keyToPress`                   | The keyboard button to press.              | None(*Mandatory parameter*) |
+|                       | `noOfPresses`                  | The number of times to press the key.      | 1                           |
+| `type_keys`           | `txtToEnter`                   | The text to type.                          | None(*Mandatory parameter*) |
+| `type`                | `txtToEnter`                   | The text to type.                          | None(*Mandatory parameter*) |
+|                       | `txtToFind`                    | The element to find and type.              | None(*Mandatory parameter*) |
+|                       | `exactmatch`                   | Whether to perform an exact match for the element. | True                        |
+|                       | `item_position`                | The position of the item to interact with. | 1                           |
+|                       | `relative_to_word_in_x`        | A reference word in the x-axis direction.  | ""                          |
+|                       | `relative_to_word_in_y`        | A reference word in the y-axis direction.  | ""                          |
+|                       | `offsetx`                      | Offset for the identified x-coordinate.    | config.offsetx_default      |
+|                       | `offsety`                      | Offset for the identified y-coordinate.    | config.offsety_default      |
+| `click`               | `txtToFind`                    | The element to find and click on.          | None(*Mandatory parameter*) |
+|                       | `exactmatch`                   | Whether to perform an exact match for the element. | True                        |
+|                       | `item_position`                | The position of the item to interact with. | 1                           |
+|                       | `relative_word_in_x_direction` | A reference word in the x-axis direction.  | ""                          |
+|                       | `relative_word_in_y_direction` | A reference word in the y-axis direction.  | ""                          |
+|                       | `offsetx`                      | Offset for the identified x-coordinate.    | config.offsetx_default      |
+|                       | `offsety`                      | Offset for the identified y-coordinate.    | config.offsety_default      |
+| `click_img_object`    | `object`                       | The image object to interact with.         | None(*Mandatory parameter*) |
+|                       | `item_position`                | The position of the item to interact with. | 1                           |
+|                       | `relative_word_in_x_direction` | A reference word in the x-axis direction.  | ""                          |
+|                       | `relative_word_in_y_direction` | A reference word in the y-axis direction.  | ""                          |
+|                       | `offsetx`                      | Offset for the identified x-coordinate.    | config.offsetx_default      |
+|                       | `offsety`                      | Offset for the identified y-coordinate.    | config.offsety_default      |
+| `scroll_find_click`   | `txtToFind`                    | The element to find during scrolling.      | None(*Mandatory parameter*) |
+|                       | `direction`                    | The direction of scrolling ("up", "down", etc.). | "down"                      |
+|                       | `scrolls`                      | The number of times to scroll.             | 1                           |
+|                       | `exactmatch`                   | Whether to perform an exact match for the element. | True                        |
+|                       | `offsetx`                      | Offset for the identified x-coordinate.    | config.offsetx_default      |
+|                       | `offsety`                      | Offset for the identified y-coordinate.    | config.offsety_default      |
+| `scroll_find`         | `txtToFind`                    | The element to find during scrolling.      | None(*Mandatory parameter*) |
+|                       | `direction`                    | The direction of scrolling ("up", "down", etc.). | "down"                      |
+|                       | `scrolls`                      | The number of times to scroll.             | 1                           |
+|                       | `exactmatch`                   | Whether to perform an exact match for the element. | True                        |
+| `scroll`              | `direction`                    | The direction of scrolling ("up", "down", etc.). | "down"                      |
+|                       | `scrolls`                      | The number of times to scroll.             | 1                           |
+| `hover`               | `txtToFind`                    | The element to find and hover over.        | None(*Mandatory parameter*) |
+|                       | `exactmatch`                   | Whether to perform an exact match for the element. | True                        |
+|                       | `item_position`                | The position of the item to interact with. | 1                           |
+|                       | `relative_word_in_x_direction` | A reference word in the x-axis direction.  | ""                          |
+|                       | `relative_word_in_y_direction` | A reference word in the y-axis direction.  | ""                          |
+|                       | `offsetx`                      | Offset for the identified x-coordinate.    | config.offsetx_default      |
+|                       | `offsety`                      | Offset for the identified y-coordinate.    | config.offsety_default      |
+| `hover_img_object`    | `object`                       | The image object to interact with.         | None(*Mandatory parameter*) |
+|                       | `item_position`                | The position of the item to interact with. | 1                           |
+|                       | `relative_word_in_x_direction` | A reference word in the x-axis direction.  | ""                          |
+|                       | `relative_word_in_y_direction` | A reference word in the y-axis direction.  | ""                          |
+|                       | `offsetx`                      | Offset for the identified x-coordinate.    | config.offsetx_default      |
+|                       | `offsety`                      | Offset for the identified y-coordinate.    | config.offsety_default      |
 
 - For more details on each function and their usage, refer to the respective function's docstring in the script.
 
@@ -163,6 +194,6 @@ markdown
 
 Jagadish Dabbiru [[Linked In](https://www.linkedin.com/in/jagadish-dabbiru)] 
 
-For queries/support: realswiftsupport165@gmail.com
+For queries/support: jagadish.dabbiru@gmail.com
 
 

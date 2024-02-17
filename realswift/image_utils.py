@@ -1,6 +1,8 @@
+import os
+import sys
 import cv2
 import numpy as np
-import pygetwindow as gw
+import browser_utils as br
 import pyautogui
 from config_module import config
 browser = config.browser
@@ -20,39 +22,29 @@ def _take_screenshot():
     Returns:
         None
     """
-    if browser == "chrome":
-        active_window = gw.getWindowsWithTitle("Google Chrome")
-    elif browser == "edge":
-        active_window = gw.getWindowsWithTitle(" Edge")
-
-    if active_window is not None:
-        active_window = active_window[0]
+    if sys.platform == "win32":
         try:
-            active_window.activate()
+            active_window = br._activate_window()
         except Exception as e:
-            print("unable to activate edge window.. trying again")
-        try:
-            active_window.activate()
-        except Exception as e:
-            print(f"unable to activate edge window..Caught exception {e}")
-            exit(1)
-                #_activate_window()
-        # Get the position and size of the active window
+            print("unable to activate browser window.. trying again")
+            try:
+                active_window = br._activate_window()
+            except Exception as e:
+                print(f"unable to activate browser window..Caught exception {e}")
+                exit(1)
         window_x, window_y, window_width, window_height = active_window.left, active_window.top, active_window.width, active_window.height
 
-        # Take a screenshot of the active window
         screenshot = pyautogui.screenshot(region=(window_x, window_y, window_width, window_height))
 
-        # Save the screenshot to a file
         screenshot.save(screenshots_path)
-        #print(f"taking screenshot from webpage.")
-        # Optionally, you can display the screenshot
-        # screenshot.show()
+
+    elif sys.platform == "linux":
+        from wand.image import Image
+        os.system(f"import -window root {screenshots_path}")
     else:
-        print("no active window found.")
-
-
-def _find_image(object, item=0, midpointRX=-1, midpointRY=-1):
+        print(f"Currently {sys.platform} platform is not supported")
+        exit(1)
+def _find_image(object, item_position=1, midpointRX=-1, midpointRY=-1):
     """
     Finds an image in the captured screenshot and returns its midpoint coordinates.
 
@@ -61,7 +53,7 @@ def _find_image(object, item=0, midpointRX=-1, midpointRY=-1):
 
     Args:
         object (str): The filename of the image to search for.
-        item (int): Index of the match if there are multiple matches. Defaults to 0.
+        item_position (int): Index of the match if there are multiple matches. Defaults to 0.
         midpointRX (int): Expected X-coordinate of the midpoint. Defaults to -1.
         midpointRY (int): Expected Y-coordinate of the midpoint. Defaults to -1.
 
@@ -93,7 +85,7 @@ def _find_image(object, item=0, midpointRX=-1, midpointRY=-1):
             if abs(midpointRY - midpointY) < 5:
                 midpoint = midpointX, midpointY
                 break
-        elif item == i:
+        elif item_position == i + 1:
             midpoint = midpointX, midpointY
             break
         i += 1

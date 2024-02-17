@@ -26,7 +26,7 @@ def _perform_ocr():
     time_delta = str(time_delta)[:-4]
     print(f"time took to read all the text from webpage- {time_delta}")
 
-def _analyse_ocr_results(txtToSearch, exactmatch, item, top_leftRX=-1, midpointRY=-1, y_axis=False):
+def _analyse_ocr_results(txtToSearch, exactmatch, item_position, top_leftRX=-1, midpointRY=-1, y_axis=False):
     #time_initial = datetime.datetime.now()
     listValues = []
     list_top = []
@@ -102,8 +102,8 @@ def _analyse_ocr_results(txtToSearch, exactmatch, item, top_leftRX=-1, midpointR
     # Extract the sorted coordinates
     sorted_coordinates = [pair[1] for pair in sorted_pairs]
     sorted_coordinates_tl = [pair[1] for pair in sorted_pairs_tl]
-    top_left_x, top_left_y = sorted_coordinates_tl[item]
-    midpoint_x, midpoint_y = sorted_coordinates[item]
+    top_left_x, top_left_y = sorted_coordinates_tl[item_position-1]
+    midpoint_x, midpoint_y = sorted_coordinates[item_position-1]
     bottom_right_x = 2 * midpoint_x - top_left_x
     bottom_right_y = 2 * midpoint_y - top_left_y
     top_left = top_left_x, top_left_y
@@ -122,4 +122,4 @@ def _analyse_ocr_results(txtToSearch, exactmatch, item, top_leftRX=-1, midpointR
     if y_axis:
         return top_left_found
     else:
-        return sorted_coordinates[item]
+        return sorted_coordinates[item_position-1]

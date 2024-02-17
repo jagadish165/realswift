@@ -1,3 +1,4 @@
+import sys
 import time
 import datetime
 import shutil
@@ -8,7 +9,7 @@ from ocr_utils import _perform_ocr,_analyse_ocr_results
 from exceptions import ElementNotFoundException
 from realswift.browser_utils import tear_down
 from reporter import report
-
+browser = config.browser
 retries = config.retries
 screenshots_folder = config.screenshots_folder
 screenshots_path = config.screenshots_path
@@ -18,7 +19,7 @@ mousespeed = config.mousespeed
 found = False
 flag_executed = False
 
-def _wait_for_element(txt, exactmatch, object, item, relative_to_word_in_x, relative_to_word_in_y, scroll=False):
+def _wait_for_element(txt, exactmatch, object, item_position, relative_to_word_in_x, relative_to_word_in_y, scroll=False):
     """
     Wait for a page element to appear.
 
@@ -26,7 +27,7 @@ def _wait_for_element(txt, exactmatch, object, item, relative_to_word_in_x, rela
         txt (str): The text to wait for on the page.
         exactmatch (bool): Whether to perform an exact match for the element.
         object (str): The element object to interact with.
-        item (int): The index of the item to interact with.
+        item_position (int): The index of the item_position to interact with.
         relative_to_word_in_x (str): A reference word in x-axis direction to uniquely identify the element.
         relative_to_word_in_y (str): A reference word in y-axis direction to uniquely identify the element.
         scroll (bool): Whether to perform scrolling if the element is not found.
@@ -46,23 +47,23 @@ def _wait_for_element(txt, exactmatch, object, item, relative_to_word_in_x, rela
             if not object == "":
                 if not relative_to_word_in_x == "":
                     midpointR = _analyse_ocr_results(relative_to_word_in_x, exactmatch, )
-                    midpoint = _find_image(object, item, midpointRY=midpointR[1])
+                    midpoint = _find_image(object, item_position, midpointRY=midpointR[1])
                 elif not relative_to_word_in_y == "":
                     midpointR = _analyse_ocr_results(relative_to_word_in_y, exactmatch, )
-                    midpoint = _find_image(object, item, midpointRX=midpointR[0])
+                    midpoint = _find_image(object, item_position, midpointRX=midpointR[0])
                 else:
                     midpoint = _find_image(object)
                 found = True
                 break
             else:
                 if not relative_to_word_in_x == "":
-                    midpointR = _analyse_ocr_results(relative_to_word_in_x, exactmatch, item)
-                    midpoint = _analyse_ocr_results(txt, exactmatch, item, midpointRY=midpointR[1])
+                    midpointR = _analyse_ocr_results(relative_to_word_in_x, exactmatch, item_position)
+                    midpoint = _analyse_ocr_results(txt, exactmatch, item_position, midpointRY=midpointR[1])
                 elif not relative_to_word_in_y == "":
-                    top_leftR = _analyse_ocr_results(relative_to_word_in_y, exactmatch, item, y_axis=True)
-                    midpoint = _analyse_ocr_results(txt, exactmatch, item, top_leftRX=top_leftR)
+                    top_leftR = _analyse_ocr_results(relative_to_word_in_y, exactmatch, item_position, y_axis=True)
+                    midpoint = _analyse_ocr_results(txt, exactmatch, item_position, top_leftRX=top_leftR)
                 else:
-                    midpoint = _analyse_ocr_results(txt, exactmatch, item)
+                    midpoint = _analyse_ocr_results(txt, exactmatch, item_position)
                 found = True
                 print(f"element '{txt}' found at location {midpoint} on the webpage")
                 break
