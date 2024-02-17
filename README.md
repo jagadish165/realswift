@@ -132,7 +132,7 @@ Create [img_objects](realswift/tests/img_objects)  folder in the same directory.
 
 ### Output:
 
-After the execution, [screenshots](realswift/tests/screenshots) folder will be created in the same directory and [report file](https://github.com/jagadish165/realswift/blob/main/realswift/tests/screenshots/output.html) will be generated inside it. You can check various identified webpage screenshots through out the execution.
+After the execution, [screenshots](realswift/tests/screenshots) folder will be created in the same directory and **[output.html](https://htmlpreview.github.io/?https://github.com/jagadish165/realswift/blob/main/realswift/tests/screenshots/output.html)** report will be generated inside it. You can check various identified webpage screenshots through out the execution.
 
 ## Automation Functions Documentation
 
