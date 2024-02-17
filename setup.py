@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
 	name="realswift",
-	version="3.0.2",
+	version="3.0.3",
 	author="Jagadish Dabbiru",
 	author_email="jagadish.dabbiru@gmail.com",
 	packages=["realswift"],

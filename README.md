@@ -70,15 +70,15 @@ from realswift.actions import *
 from realswift.browser_utils import open_browser
 
 open_browser("https://www.amazon.in")                                   #Opens amazon.in browser
-click("Search Amazon.in")                                               #Tries to identify "Search Amazon.in" string from the website and clicks it  
+click("Search Amazon.in")                                               #Tries to identify "Search Amazon.in" string from the webpage and clicks it  
 type_keys("apple watch")                                                #Enters "apple watch" in the search field
 press_keys("enter")                                                     #Clicks enter 
-scroll_find_click("Apple Watch Series 9","down",10,exactmatch=False)    #Tries to identify "Apple Watch Series 9" substring by scrolling down 10 times 
-click("Bank offer")                                                     #Tries to identify "Bank offer" string from the website and clicks it
-click("See details",item_position=2,exactmatch=False,offsety=3)                  #Tries to identify second "See details" string from the website and clicks offset of 3 pixels" 
-click("Offer 2")                                                        #Tries to identify "Offer 2" string from the website and clicks it 
+scroll_find_click("Apple Watch Series 9","down",10,exactmatch=False)    #Tries to identify "Apple Watch Series 9" substring for each scroll down 10 times 
+click("Bank offer")                                                     #Tries to identify "Bank offer" string from the webpage and clicks it
+click("See details",item_position=2,exactmatch=False,offsety=3)         #Tries to identify second "See details" string from the webpage and clicks offset of 3 pixels 
+click("Offer 2")                                                        #Tries to identify "Offer 2" string from the webpage and clicks it 
 scroll("down",4)                                                        #Scrolls down 4 times             
-click("Back")                                                           #Tries to identify "Back" string from the website and clicks it 
+click("Back")                                                           #Tries to identify "Back" string from the webpage and clicks it 
 scroll_find_click("Buy Now",scrolls=4)                                  #Tries to identify "Buy now" string by scrolling down 10 times
 ````
 
@@ -95,16 +95,17 @@ Scenario:
 from realswift.browser_utils import open_browser
 from realswift.actions import *
 
-open_browser("https://www.nykaa.com")
-hover("Mom & Baby")
-hover("Bath & Body")
-click("Hand Wash")
-scroll_find_click("Price","down",5)
-scroll_find_click("500","down",5,False)
-scroll_find_click("Disdcount","down",5)
-scroll_find_click("30% And","down",5,False)
-scroll_find("Bath & Body","down",5,False)
-click("Bath & Body",exactmatch=False,item_position=2)
+open_browser("https://www.nykaa.com")                   #Opens nykaa.com browser
+hover("Mom & Baby")                                     #Tries to identify "Mom & Baby" string from the webpage and hovers on it
+hover("Bath & Body")                                    #Tries to identify "Bath & Body" string from the webpage and hovers on it
+click("Hand Wash")                                      #Tries to identify "Hand Wash" string from the webpage and clicks on it
+scroll_find_click("Price","down",5)                     #Tries to identify "Price" string by for each scroll down 5 times and clicks on it 
+scroll_find_click("500","down",5,False)                 #Tries to identify "500" substring by for each scroll down 5 times and clicks on it
+scroll_find_click("Discount","down",5)                  #Tries to identify "Discount" string by for each scroll down 5 times and clicks on it
+scroll_find_click("30% And","down",5,False)             #Tries to identify "30%" substring by for each scroll down 5 times and clicks on it   
+scroll_find("Bath & Body","down",5,False)               #Tries to identify "Bath & Body" substring by for each scroll down 5 times and clicks on it   
+click("Bath & Body",exactmatch=False,item_position=2)   #Tries to identify 2nd element "Bath & Body" substring from the webpage and clicks on it
+
 ````
 ### Configuration: 
 
