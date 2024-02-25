@@ -12,6 +12,7 @@ import internal
 from ocr_utils import _perform_ocr
 from realswift.exceptions import InvalidScrollOptionException, ElementNotFoundException
 from reporter import report
+
 retries = config.retries
 screenshots_folder = config.screenshots_folder
 screenshots_path = config.screenshots_path
@@ -82,13 +83,6 @@ def type( txtToEnter, txtToFind, exactmatch=True, item_position=1, relative_to_w
 
     time_diff = datetime.datetime.now() - start_time
     time_diff = str(time_diff)[:-4]
-    _take_screenshot()
-    try:
-        now = datetime.datetime.now()
-        new_file_path = f"{screenshots_folder}/old_{screenshots_folder}/element_screenshot_{now.strftime('%Y-%m-%d-%H-%M-%S')}.png"
-        shutil.copyfile(screenshots_path, new_file_path)
-    except Exception as e:
-        print(f"unable to copy analysed_screenshot to old_{screenshots_folder}.. getting exception {e}")
     report(f"Found element '{txtToFind}' and typed '{txtToEnter}'","Passed",time_diff,new_file_path)
 
 def click(txtToFind, exactmatch=True, item_position=1, relative_word_in_x_direction="", relative_word_in_y_direction="",offsetx=offsetx_default,offsety=offsety_default):
@@ -201,10 +195,10 @@ def scroll_find( txtToFind,direction="down", scrolls=1,exactmatch=True):
         start_try = start_try + 1
     if not found:
         try:
-            raise Exception(f"element '{txtToFind}' not found within {retries} scrolls...exiting the script")
+            raise ElementNotFoundException(f"element '{txtToFind}' not found within {retries} scrolls...exiting the script")
         except ElementNotFoundException as ce:
             print(f"Caught an exception: {ce.message}")
-            report(f"Element '{txtToFind}' not found", "Failed", "NA", screenshots_path)
+            report(f"Element '{txtToFind}' not found within {retries} scrolls", "Failed", "NA", screenshots_path)
             br.tear_down()
             exit(1)
         exit(1)
