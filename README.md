@@ -55,7 +55,7 @@ Set 0 for DISPLAY variable
 
 ##### Watch demo here
 
-<a href="https://youtu.be/5VqXYLMMT8s"><img src="video.png" width="540"/></a>
+<a href="https://youtu.be/NxLKMV7s3yk?si=cV1FHVOgzFm8rT9K"><img src="video.png" width="540"/></a>
 
 
 Create .py files and run the following example scripts.
