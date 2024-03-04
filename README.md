@@ -53,6 +53,11 @@ Set 0 for DISPLAY variable
 
 ### Usage
 
+##### Watch demo here
+
+<a href="https://youtu.be/5VqXYLMMT8s"><img src="video.png" width="540"/></a>
+
+
 Create .py files and run the following example scripts.
 
 **Example Script 1:**
